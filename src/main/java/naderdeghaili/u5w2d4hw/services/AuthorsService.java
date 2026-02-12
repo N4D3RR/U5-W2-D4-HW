@@ -1,5 +1,6 @@
 package naderdeghaili.u5w2d4hw.services;
 
+import com.cloudinary.Cloudinary;
 import lombok.extern.slf4j.Slf4j;
 import naderdeghaili.u5w2d4hw.entities.Author;
 import naderdeghaili.u5w2d4hw.exceptions.NotFoundException;
@@ -18,9 +19,11 @@ public class AuthorsService {
 
 
     private final AuthorsRepository authorsRepository;
+    private final Cloudinary clUploader;
 
-    public AuthorsService(AuthorsRepository authorsRepository) {
+    public AuthorsService(AuthorsRepository authorsRepository, Cloudinary clUploader) {
         this.authorsRepository = authorsRepository;
+        this.clUploader = clUploader;
     }
 
 
@@ -65,4 +68,8 @@ public class AuthorsService {
         Author found = this.findById(authorId);
         this.authorsRepository.delete(found);
     }
+
+    //PATCH PROFILE PIC
+    public
+
 }
