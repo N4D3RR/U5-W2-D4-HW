@@ -1,9 +1,13 @@
 package naderdeghaili.u5w2d4hw.controllers;
 
 import naderdeghaili.u5w2d4hw.entities.Blog;
-import naderdeghaili.u5w2d4hw.payloads.NewBlogPayload;
+import naderdeghaili.u5w2d4hw.exceptions.ValidationException;
+import naderdeghaili.u5w2d4hw.payloads.ModifyBlogDTO;
+import naderdeghaili.u5w2d4hw.payloads.NewBlogDTO;
 import naderdeghaili.u5w2d4hw.services.BlogsService;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,8 +32,17 @@ public class BlogsController {
     //POST BLOG
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Blog saveBlog(@RequestBody NewBlogPayload payload) {
-        return this.blogsService.saveBlog(payload);
+    public Blog saveBlog(@RequestBody @Validated NewBlogDTO payload, BindingResult validateResult) {
+        if (validateResult.hasErrors()) {
+            List<String> errorList = validateResult.getFieldErrors()
+                    .stream()
+                    .map(fieldError -> fieldError.getDefaultMessage())
+                    .toList();
+            throw new ValidationException((errorList));
+        } else {
+
+            return this.blogsService.saveBlog(payload);
+        }
     }
 
 
@@ -41,8 +54,18 @@ public class BlogsController {
 
     //PUT BLOG
     @PutMapping("/{blogId}")
-    public Blog getBlogByIdAndUpdate(@PathVariable UUID blogId, @RequestBody NewBlogPayload payload) {
-        return this.blogsService.findByIdAndUpdate(blogId, payload);
+    public Blog getBlogByIdAndUpdate(@PathVariable UUID blogId, @RequestBody @Validated ModifyBlogDTO payload, BindingResult validateResult) {
+        if (validateResult.hasErrors()) {
+            List<String> errorList = validateResult.getFieldErrors()
+                    .stream()
+                    .map(fieldError -> fieldError.getDefaultMessage())
+                    .toList();
+            throw new ValidationException((errorList));
+        } else {
+
+
+            return this.blogsService.findByIdAndUpdate(blogId, payload);
+        }
     }
 
     //DELETE BLOG

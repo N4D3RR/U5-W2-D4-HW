@@ -4,7 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import naderdeghaili.u5w2d4hw.entities.Author;
 import naderdeghaili.u5w2d4hw.entities.Blog;
 import naderdeghaili.u5w2d4hw.exceptions.NotFoundException;
-import naderdeghaili.u5w2d4hw.payloads.NewBlogPayload;
+import naderdeghaili.u5w2d4hw.payloads.ModifyBlogDTO;
+import naderdeghaili.u5w2d4hw.payloads.NewBlogDTO;
 import naderdeghaili.u5w2d4hw.repositories.AuthorsRepository;
 import naderdeghaili.u5w2d4hw.repositories.BlogsRepository;
 import org.springframework.stereotype.Service;
@@ -31,9 +32,9 @@ public class BlogsService {
     }
 
     //POST blog
-    public Blog saveBlog(NewBlogPayload payload) {
-        Author authorDB = authorsRepository.findById(payload.getAuthorId()).orElseThrow(() -> new NotFoundException(payload.getAuthorId()));
-        Blog newBlog = new Blog(payload.getCategoria(), payload.getTitolo(), payload.getContenuto(), payload.getTempoDiLettura(), authorDB);
+    public Blog saveBlog(NewBlogDTO payload) {
+        Author authorDB = authorsRepository.findById(payload.authorId()).orElseThrow(() -> new NotFoundException(payload.authorId()));
+        Blog newBlog = new Blog(payload.categoria(), payload.titolo(), payload.contenuto(), payload.tempoDiLettura(), authorDB);
 
         return blogsRepository.save(newBlog);
     }
@@ -45,13 +46,13 @@ public class BlogsService {
     }
 
     //PUT blog
-    public Blog findByIdAndUpdate(UUID blogId, NewBlogPayload payload) {
+    public Blog findByIdAndUpdate(UUID blogId, ModifyBlogDTO payload) {
         Blog found = this.findById(blogId);
 
-        found.setCategoria(payload.getCategoria());
-        found.setTitolo(payload.getTitolo());
-        found.setContenuto(payload.getContenuto());
-        found.setTempoDiLettura(payload.getTempoDiLettura());
+        found.setCategoria(payload.categoria());
+        found.setTitolo(payload.titolo());
+        found.setContenuto(payload.contenuto());
+        found.setTempoDiLettura(payload.tempoDiLettura());
 
         Blog modifiedBlog = this.blogsRepository.save(found);
 

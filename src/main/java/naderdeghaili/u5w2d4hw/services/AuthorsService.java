@@ -3,7 +3,7 @@ package naderdeghaili.u5w2d4hw.services;
 import lombok.extern.slf4j.Slf4j;
 import naderdeghaili.u5w2d4hw.entities.Author;
 import naderdeghaili.u5w2d4hw.exceptions.NotFoundException;
-import naderdeghaili.u5w2d4hw.payloads.NewAuthorPayload;
+import naderdeghaili.u5w2d4hw.payloads.NewAuthorDTO;
 import naderdeghaili.u5w2d4hw.repositories.AuthorsRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,8 +31,8 @@ public class AuthorsService {
     }
 
     //POST autore
-    public Author saveAuthor(NewAuthorPayload payload) {
-        Author newAuthor = new Author(payload.getNome(), payload.getCognome(), payload.getEmail(), payload.getDataDiNascita());
+    public Author saveAuthor(NewAuthorDTO payload) {
+        Author newAuthor = new Author(payload.nome(), payload.cognome(), payload.email(), payload.dataDiNascita());
 
         return authorsRepository.save(newAuthor);
     }
@@ -43,13 +43,13 @@ public class AuthorsService {
     }
 
     //PUT AUTHOR
-    public Author findByIdAndUpdate(UUID authorId, NewAuthorPayload payload) {
+    public Author findByIdAndUpdate(UUID authorId, NewAuthorDTO payload) {
         Author found = this.findById(authorId);
 
-        found.setNome(payload.getNome());
-        found.setCognome(payload.getCognome());
-        found.setEmail(payload.getEmail());
-        found.setDataDiNascita(payload.getDataDiNascita());
+        found.setNome(payload.nome());
+        found.setCognome(payload.cognome());
+        found.setEmail(payload.email());
+        found.setDataDiNascita(payload.dataDiNascita());
 
         Author modifiedAuthor = this.authorsRepository.save(found);
 
